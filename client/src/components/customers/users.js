@@ -13,10 +13,11 @@ class Users extends React.Component{
 			.then(res => res.json())
 			.then(users => this.setState({users},() => console.log("Customers Fetched..",users)));
 	}
+
 	render(){
 		return(
 			<div>
-				Users Data
+				<h3>Users Details</h3>
 				<ul>
 					{this.state.users.map(user =>
 						<li key={user.id}>
