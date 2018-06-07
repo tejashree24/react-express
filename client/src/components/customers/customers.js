@@ -1,15 +1,6 @@
 import React,{Component} from 'react';
 import './customers.css';
 
-
-const User = ({match}) =>{
-	return(
-		<div>
-			<h3>Welcome User {match.params.username}</h3>
-		</div>
-		)
-}
-
 class Customers extends React.Component{
 	constructor(){
 		super();
@@ -19,22 +10,27 @@ class Customers extends React.Component{
 	}
 
 	componentDidMount(){
-		fetch('/api/customers')
-			.then(res => res.json())
-			.then(customers => this.setState({customers},() => console.log("Customers Fetched..",customers)));
+		this.getCustomers();
 	}
 
+	getCustomers = _ => {
+		fetch('http://localhost:5000/customers')
+		.then(response => response.json())
+		.then(response => this.setState({customers:response.data}))
+		.catch(err=> console.error(err))
+	}
+
+	renderCustomer = ({id,firstName}) => 
+		<div key={id}>
+			<h5>Id: {id} Name: {firstName}</h5>
+		</div>
+	
 	render(){
+		const {customers} = this.state;
 		return(
-			<div>
-				<h3>Customers Details</h3><br/>
-				<ul>
-					{this.state.customers.map(customer =>
-						<li key={customer.id}>
-							{customer.firstName} {customer.lastName}
-						</li>
-					)}
-				</ul>
+			<div className="App">
+			<h3> Customers Details </h3>
+				{customers.map(this.renderCustomer)}
 			</div>
 		);
 	}
